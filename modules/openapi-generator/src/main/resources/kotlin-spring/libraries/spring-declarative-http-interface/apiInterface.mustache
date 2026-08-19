@@ -29,7 +29,12 @@ import io.swagger.annotations.AuthorizationScope
 
 import org.springframework.web.service.annotation.*
 import org.springframework.web.bind.annotation.*
+{{^useResponseEntity}}
+import org.springframework.http.HttpStatus
+{{/useResponseEntity}}
+{{#useResponseEntity}}
 import org.springframework.http.ResponseEntity
+{{/useResponseEntity}}
 
 {{#useBeanValidation}}
 import org.springframework.validation.annotation.Validated
@@ -38,25 +43,29 @@ import {{javaxPackage}}.validation.constraints.*
 {{/useBeanValidation}}
 
 {{#reactiveModeReactor}}
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 {{/reactiveModeReactor}}
 
 import kotlin.collections.List
 import kotlin.collections.Map
 
-{{#useRequestMappingOnInterface}}@HttpExchange(
-"{{=<% %>=}}\${api.base-path:$BASE_PATH}<%={{ }}=%>"
-){{/useRequestMappingOnInterface}}
+{{#useRequestMappingOnInterface}}
+@HttpExchange(BASE_PATH) // Generate with 'requestMappingMode' set to 'none' to skip the base path on the interface
+{{/useRequestMappingOnInterface}}
 {{#useBeanValidation}}
 @Validated
 {{/useBeanValidation}}
 {{#operations}}
 interface {{classname}} {
 
-{{#operation}}
-    {{#httpMethod}}
-    @HttpExchange(
+{{#operation}}{{!
+}}{{^useResponseEntity}}    @ResponseStatus({{#springHttpStatus}}{{#responses.0}}{{{code}}}{{/responses.0}}{{/springHttpStatus}})
+{{/useResponseEntity}}{{!
+}}{{#vendorExtensions.x-operation-extra-annotation}}
+    {{{.}}}
+{{/vendorExtensions.x-operation-extra-annotation}}{{!
+}}{{#httpMethod}}    @HttpExchange(
+        // "{{#lambdaEscapeInNormalString}}{{{path}}}{{/lambdaEscapeInNormalString}}"
         url = PATH_{{#lambda.uppercase}}{{#lambda.snakecase}}{{{operationId}}}{{/lambda.snakecase}}{{/lambda.uppercase}},
         method = "{{httpMethod}}"
     )
@@ -71,9 +80,7 @@ interface {{classname}} {
 {{/operation}}
     companion object {
         //for your own safety never directly reuse these path definitions in tests
-    {{#useRequestMappingOnInterface}}
         const val BASE_PATH: String = "{{=<% %>=}}<%contextPath%><%={{ }}=%>"
-    {{/useRequestMappingOnInterface}}
     {{#operation}}
         const val PATH_{{#lambda.uppercase}}{{#lambda.snakecase}}{{{operationId}}}{{/lambda.snakecase}}{{/lambda.uppercase}}: String = "{{{path}}}"
     {{/operation}}

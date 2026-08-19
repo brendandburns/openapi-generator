@@ -55,7 +55,7 @@ namespace Org.OpenAPITools.Model
         /// Gets or Sets Type
         /// </summary>
         [JsonPropertyName("type")]
-        public ZebraType? Type { get { return this.TypeOption; } set { this.TypeOption = new Option<ZebraType?>(value); } }
+        public ZebraType? Type { get { return this.TypeOption.Value; } set { this.TypeOption = new Option<ZebraType?>(value); } }
 
         /// <summary>
         /// Gets or Sets ClassName
@@ -98,8 +98,18 @@ namespace Org.OpenAPITools.Model
     /// <summary>
     /// A Json converter for type <see cref="Zebra" />
     /// </summary>
-    public class ZebraJsonConverter : JsonConverter<Zebra>
+    public partial class ZebraJsonConverter : JsonConverter<Zebra>
     {
+        partial void OnCreated();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ZebraJsonConverter" /> class.
+        /// </summary>
+        public ZebraJsonConverter()
+        {
+            OnCreated();
+        }
+
         /// <summary>
         /// Deserializes json to <see cref="Zebra" />
         /// </summary>
@@ -139,9 +149,7 @@ namespace Org.OpenAPITools.Model
                             className = new Option<string>(utf8JsonReader.GetString());
                             break;
                         case "type":
-                            string typeRawValue = utf8JsonReader.GetString();
-                            if (typeRawValue != null)
-                                type = new Option<ZebraType?>(ZebraTypeValueConverter.FromStringOrDefault(typeRawValue));
+                            type = new Option<ZebraType?>(JsonSerializer.Deserialize<ZebraType?>(ref utf8JsonReader, jsonSerializerOptions));
                             break;
                         default:
                             break;

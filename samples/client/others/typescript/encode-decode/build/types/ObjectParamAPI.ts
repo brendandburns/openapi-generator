@@ -77,10 +77,10 @@ export interface DefaultApiTestEncodeArrayOfMapsOfObjectsPostRequest {
 export interface DefaultApiTestEncodeArrayOfNullableObjectsPostRequest {
     /**
      * 
-     * @type Array&lt;ComplexObject&gt;
+     * @type Array&lt;ComplexObject | null&gt;
      * @memberof DefaultApitestEncodeArrayOfNullableObjectsPost
      */
-    complexObject: Array<ComplexObject>
+    complexObject: Array<ComplexObject | null>
 }
 
 export interface DefaultApiTestEncodeArrayOfNullablePostRequest {
@@ -122,10 +122,10 @@ export interface DefaultApiTestEncodeMapOfMapsOfObjectsPostRequest {
 export interface DefaultApiTestEncodeMapOfObjectsPostRequest {
     /**
      * 
-     * @type { [key: string]: ComplexObject | null; }
+     * @type { [key: string]: ComplexObject; }
      * @memberof DefaultApitestEncodeMapOfObjectsPost
      */
-    requestBody: { [key: string]: ComplexObject | null; }
+    requestBody: { [key: string]: ComplexObject; }
 }
 
 export interface DefaultApiTestEncodeMapOfPrimitivePostRequest {
@@ -266,14 +266,14 @@ export class ObjectDefaultApi {
     /**
      * @param param the request object
      */
-    public testDecodeArrayOfNullableObjectsGetWithHttpInfo(param: DefaultApiTestDecodeArrayOfNullableObjectsGetRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<Array<ComplexObject>>> {
+    public testDecodeArrayOfNullableObjectsGetWithHttpInfo(param: DefaultApiTestDecodeArrayOfNullableObjectsGetRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<Array<ComplexObject | null>>> {
         return this.api.testDecodeArrayOfNullableObjectsGetWithHttpInfo( options).toPromise();
     }
 
     /**
      * @param param the request object
      */
-    public testDecodeArrayOfNullableObjectsGet(param: DefaultApiTestDecodeArrayOfNullableObjectsGetRequest = {}, options?: ConfigurationOptions): Promise<Array<ComplexObject>> {
+    public testDecodeArrayOfNullableObjectsGet(param: DefaultApiTestDecodeArrayOfNullableObjectsGetRequest = {}, options?: ConfigurationOptions): Promise<Array<ComplexObject | null>> {
         return this.api.testDecodeArrayOfNullableObjectsGet( options).toPromise();
     }
 
@@ -308,14 +308,14 @@ export class ObjectDefaultApi {
     /**
      * @param param the request object
      */
-    public testDecodeMapOfObjectsGetWithHttpInfo(param: DefaultApiTestDecodeMapOfObjectsGetRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<{ [key: string]: ComplexObject | null; }>> {
+    public testDecodeMapOfObjectsGetWithHttpInfo(param: DefaultApiTestDecodeMapOfObjectsGetRequest = {}, options?: ConfigurationOptions): Promise<HttpInfo<{ [key: string]: ComplexObject; }>> {
         return this.api.testDecodeMapOfObjectsGetWithHttpInfo( options).toPromise();
     }
 
     /**
      * @param param the request object
      */
-    public testDecodeMapOfObjectsGet(param: DefaultApiTestDecodeMapOfObjectsGetRequest = {}, options?: ConfigurationOptions): Promise<{ [key: string]: ComplexObject | null; }> {
+    public testDecodeMapOfObjectsGet(param: DefaultApiTestDecodeMapOfObjectsGetRequest = {}, options?: ConfigurationOptions): Promise<{ [key: string]: ComplexObject; }> {
         return this.api.testDecodeMapOfObjectsGet( options).toPromise();
     }
 

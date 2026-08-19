@@ -164,7 +164,7 @@ public class TestUtils {
         config.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_11);
         JavaParser parser = new JavaParser(config);
         ParseResult<CompilationUnit> parseResult = parser.parse(javaSourceCode);
-        assertTrue(parseResult.isSuccessful(), String.valueOf(parseResult.getProblems()));
+        assertTrue(parseResult.isSuccessful(), parseResult.getProblems() + "\n in " + javaSourceCode);
     }
 
     public static void assertFileContains(Path path, String... lines) {
@@ -173,7 +173,7 @@ public class TestUtils {
             String file = linearize(generatedFile);
             assertNotNull(file);
             for (String line : lines)
-                assertTrue(file.contains(linearize(line)), "File does not contain line [" + line + "]");
+                assertTrue(file.contains(linearize(line)), "File '" + path + "' does not contain line [" + line + "]");
         } catch (IOException e) {
             fail("Unable to evaluate file " + path);
         }

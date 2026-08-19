@@ -104,6 +104,7 @@ paths:
             - sold
             type: string
           type: array
+          default: null
         style: form
       responses:
         "200":
@@ -113,11 +114,13 @@ paths:
                 items:
                   $ref: "#/components/schemas/Pet"
                 type: array
+                default: null
             application/json:
               schema:
                 items:
                   $ref: "#/components/schemas/Pet"
                 type: array
+                default: null
           description: successful operation
         "400":
           description: Invalid status value
@@ -146,6 +149,7 @@ paths:
           items:
             type: string
           type: array
+          default: null
         style: form
       responses:
         "200":
@@ -155,11 +159,13 @@ paths:
                 items:
                   $ref: "#/components/schemas/Pet"
                 type: array
+                default: null
             application/json:
               schema:
                 items:
                   $ref: "#/components/schemas/Pet"
                 type: array
+                default: null
           description: successful operation
         "400":
           description: Invalid tag value
@@ -319,6 +325,7 @@ paths:
                 additionalProperties:
                   format: int32
                   type: integer
+                type: object
           description: successful operation
       security:
       - api_key: []
@@ -770,6 +777,7 @@ paths:
           items:
             $ref: "#/components/schemas/CodesEnum"
           type: array
+          default: null
         style: form
       responses:
         "200":
@@ -786,7 +794,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/myObject"
+                allOf:
+                - $ref: "#/components/schemas/myObject"
+                nullable: true
           description: ""
       tags:
       - fake
@@ -799,7 +809,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/myObject"
+                allOf:
+                - $ref: "#/components/schemas/myObject"
+                nullable: true
           description: ""
       tags:
       - fake
@@ -816,6 +828,7 @@ paths:
                   $ref: "#/components/schemas/myObject"
                 nullable: true
                 type: array
+                default: null
           description: ""
       tags:
       - fake
@@ -860,6 +873,7 @@ components:
             items:
               $ref: "#/components/schemas/User"
             type: array
+            default: null
       description: List of user object
       required: true
     Pet:
@@ -889,12 +903,12 @@ components:
     Order:
       description: An order for a pets from the pet store
       example:
+        id: 0
         petId: 6
         quantity: 1
-        id: 0
         shipDate: 2000-01-23T04:56:07.000+00:00
-        complete: false
         status: placed
+        complete: false
       properties:
         id:
           format: int64
@@ -924,8 +938,8 @@ components:
     Category:
       description: A category for a pet
       example:
-        name: name
         id: 6
+        name: name
       properties:
         id:
           format: int64
@@ -939,14 +953,14 @@ components:
     User:
       description: A User who is purchasing from the pet store
       example:
+        id: 0
+        username: username
         firstName: firstName
         lastName: lastName
-        password: password
-        userStatus: 6
-        phone: phone
-        id: 0
         email: email
-        username: username
+        password: password
+        phone: phone
+        userStatus: 6
       properties:
         id:
           format: int64
@@ -973,8 +987,8 @@ components:
     Tag:
       description: A tag for a pet
       example:
-        name: name
         id: 1
+        name: name
       properties:
         id:
           format: int64
@@ -987,19 +1001,19 @@ components:
     Pet:
       description: A pet for sale in the pet store
       example:
+        id: 0
+        category:
+          id: 6
+          name: name
+        name: doggie
         photoUrls:
         - photoUrls
         - photoUrls
-        name: doggie
-        id: 0
-        category:
-          name: name
-          id: 6
         tags:
-        - name: name
-          id: 1
-        - name: name
-          id: 1
+        - id: 1
+          name: name
+        - id: 1
+          name: name
         status: available
       properties:
         id:
@@ -1017,6 +1031,7 @@ components:
           xml:
             name: photoUrl
             wrapped: true
+          default: null
         tags:
           items:
             $ref: "#/components/schemas/Tag"
@@ -1024,6 +1039,7 @@ components:
           xml:
             name: tag
             wrapped: true
+          default: null
         status:
           deprecated: true
           description: pet status in the store
@@ -1097,6 +1113,7 @@ components:
           items:
             type: string
           type: array
+          default: null
         ref_array_prefix_items:
           description: |
             An item that was added to the queue.
@@ -1104,6 +1121,7 @@ components:
           maxItems: 5
           minItems: 3
           type: array
+          default: null
     HTTPValidationError:
       properties: {}
       title: HTTPValidationError
@@ -1115,6 +1133,7 @@ components:
       maxItems: 5
       minItems: 3
       type: array
+      default: null
     circular_reference_1:
       properties:
         prop1:
@@ -1133,14 +1152,17 @@ components:
           items:
             $ref: "#/components/schemas/Tag"
           type: array
+          default: null
         arrayFooTwo:
           items:
             $ref: "#/components/schemas/Tag"
           type: array
+          default: null
         arrayFooThree:
           items:
             $ref: "#/components/schemas/Tag"
           type: array
+          default: null
     CodesEnum:
       enum:
       - Code 1
@@ -1153,6 +1175,7 @@ components:
           items:
             type: string
           type: array
+          default: null
       required:
       - arrayOfStrings
     AllOfSimpleModel:
@@ -1163,6 +1186,7 @@ components:
     SelfReference:
       items: {}
       type: array
+      default: null
     SelfReferenceOneOf:
       oneOf:
       - type: string
@@ -1176,6 +1200,12 @@ components:
       properties:
         dummy:
           type: string
+    PetWithTypesObjectNullAndRef:
+      properties:
+        first_property:
+          $ref: "#/components/schemas/Pet"
+        second_property:
+          description: just null type
     updatePetWithForm_request:
       properties:
         name:
@@ -1203,6 +1233,7 @@ components:
       - items:
           type: string
         type: array
+        default: null
     _fake_webhooks_sources_deleted_post_request_event:
       properties:
         event_id:

@@ -18,12 +18,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 
 
 @Schema(description="")
 @JsonTypeName("Pet")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.18.0-SNAPSHOT")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", comments = "Generator version: 7.25.0-SNAPSHOT")
 public class Pet  implements Serializable {
   private Long id;
   private Category category;
@@ -146,7 +147,7 @@ public class Pet  implements Serializable {
   }
 
   
-  @Schema(example = "doggie", required = true, description = "")
+  @Schema(example = "doggie", requiredMode = Schema.RequiredMode.REQUIRED, description = "")
   @JsonProperty(required = true, value = "name")
   @NotNull public String getName() {
     return name;
@@ -165,7 +166,7 @@ public class Pet  implements Serializable {
   }
 
   
-  @Schema(required = true, description = "")
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "")
   @JsonProperty(required = true, value = "photoUrls")
   @NotNull public Set<String> getPhotoUrls() {
     return photoUrls;
@@ -291,10 +292,7 @@ public class Pet  implements Serializable {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 
@@ -352,4 +350,3 @@ public class Pet  implements Serializable {
     }
   }
 }
-

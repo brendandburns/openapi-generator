@@ -15,7 +15,6 @@ package org.openapitools.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import java.util.Locale;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -45,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DefaultValue.JSON_PROPERTY_ARRAY_STRING_EXTENSION_NULLABLE,
   DefaultValue.JSON_PROPERTY_STRING_NULLABLE
 })
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.18.0-SNAPSHOT")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0-SNAPSHOT")
 public class DefaultValue {
   public static final String JSON_PROPERTY_ARRAY_STRING_ENUM_REF_DEFAULT = "array_string_enum_ref_default";
   @javax.annotation.Nullable
@@ -291,7 +290,7 @@ public class DefaultValue {
   }
 
   public DefaultValue addArrayStringNullableItem(String arrayStringNullableItem) {
-    if (this.arrayStringNullable == null || !this.arrayStringNullable.isPresent()) {
+    if (this.arrayStringNullable == null || !this.arrayStringNullable.isPresent() || this.arrayStringNullable.get() == null) {
       this.arrayStringNullable = JsonNullable.<List<String>>of(new ArrayList<>());
     }
     try {
@@ -336,7 +335,7 @@ public class DefaultValue {
   }
 
   public DefaultValue addArrayStringExtensionNullableItem(String arrayStringExtensionNullableItem) {
-    if (this.arrayStringExtensionNullable == null || !this.arrayStringExtensionNullable.isPresent()) {
+    if (this.arrayStringExtensionNullable == null || !this.arrayStringExtensionNullable.isPresent() || this.arrayStringExtensionNullable.get() == null) {
       this.arrayStringExtensionNullable = JsonNullable.<List<String>>of(new ArrayList<>());
     }
     try {
@@ -407,6 +406,7 @@ public class DefaultValue {
     this.stringNullable = JsonNullable.<String>of(stringNullable);
   }
 
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -463,10 +463,7 @@ public class DefaultValue {
    * (except the first line).
    */
   private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
   }
 
 }

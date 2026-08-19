@@ -84,7 +84,7 @@ import org.openapitools.client.auth.ApiKeyAuth;
 /**
  * <p>ApiClient class.</p>
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.18.0-SNAPSHOT")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.25.0-SNAPSHOT")
 public class ApiClient extends JavaTimeFormatter {
   protected static final Pattern JSON_MIME_PATTERN = Pattern.compile("(?i)^(application/json|[^;/ \t]+/[^;/ \t]+[+]json)[ \t]*(;.*)?$");
 
@@ -975,6 +975,7 @@ public class ApiClient extends JavaTimeFormatter {
    * @param authNames The authentications to apply
    * @param returnType The return type into which to deserialize the response
    * @param isBodyNullable True if the body is nullable
+   * @param errorTypes Mapping of error codes to types into which to deserialize the response
    * @return The response body in type of string
    * @throws ApiException API exception
    */
@@ -991,7 +992,9 @@ public class ApiClient extends JavaTimeFormatter {
       String contentType,
       String[] authNames,
       GenericType<T> returnType,
-      boolean isBodyNullable)
+      boolean isBodyNullable,
+      Map<String, GenericType> errorTypes
+      )
       throws ApiException {
 
     String targetURL;
@@ -1089,6 +1092,8 @@ public class ApiClient extends JavaTimeFormatter {
         String respBody = null;
         if (response.hasEntity()) {
           try {
+            // call bufferEntity, so that a subsequent call to `readEntity` in `deserialize` doesn't fail
+            response.bufferEntity();
             respBody = String.valueOf(response.readEntity(String.class));
             message = respBody;
           } catch (RuntimeException e) {
@@ -1096,7 +1101,7 @@ public class ApiClient extends JavaTimeFormatter {
           }
         }
         throw new ApiException(
-            response.getStatus(), message, buildResponseHeaders(response), respBody);
+            response.getStatus(), message, buildResponseHeaders(response), respBody, deserializeErrorEntity(errorTypes, response));
       }
     } finally {
       try {
@@ -1105,6 +1110,30 @@ public class ApiClient extends JavaTimeFormatter {
         // it's not critical, since the response object is local in method invokeAPI; that's fine,
         // just continue
       }
+    }
+  }
+  
+  /**
+   * Deserialize the response body into an error entity based on HTTP status code.
+   * Looks up the error type from the errorTypes map using the response status code,
+   * or falls back to the "default" error type if no match is found.
+   *
+   * @param errorTypes Map of status code strings to GenericType for deserialization
+   * @param response The HTTP response
+   * @return The deserialized error entity, or null if not found or deserialization fails
+   */
+  private Object deserializeErrorEntity(Map<String, GenericType> errorTypes, Response response) {
+    if (errorTypes == null) {
+      return null;
+    }
+    GenericType errorType = errorTypes.get(String.valueOf(response.getStatus()));
+    if (errorType == null) {
+        errorType = errorTypes.get("0"); // "0" is the "default" response
+    }
+    try {
+      return deserialize(response, errorType);
+    } catch (Exception e) {
+      return null;
     }
   }
 
@@ -1133,7 +1162,7 @@ public class ApiClient extends JavaTimeFormatter {
    */
   @Deprecated
   public <T> ApiResponse<T> invokeAPI(String path, String method, List<Pair> queryParams, Object body, Map<String, String> headerParams, Map<String, String> cookieParams, Map<String, Object> formParams, String accept, String contentType, String[] authNames, GenericType<T> returnType, boolean isBodyNullable) throws ApiException {
-    return invokeAPI(null, path, method, queryParams, body, headerParams, cookieParams, formParams, accept, contentType, authNames, returnType, isBodyNullable);
+    return invokeAPI(null, path, method, queryParams, body, headerParams, cookieParams, formParams, accept, contentType, authNames, returnType, isBodyNullable, null/*TODO SME manage*/);
   }
 
   /**
