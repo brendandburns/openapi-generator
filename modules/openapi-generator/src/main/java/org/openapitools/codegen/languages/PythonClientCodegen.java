@@ -639,12 +639,23 @@ public class PythonClientCodegen extends AbstractPythonCodegen implements Codege
 
     private void postProcessClientOperations(
             Map<String, Object> objs, List<CodegenOperation> operations) {
+        addDefaultContentTypeForBodyOperations(operations);
+
         if (useIndependentImplicitClients) {
             renameIndependentClientOperationMembers(operations);
         }
 
         if (hasJsonHeaderParameter(operations)) {
             objs.put("x-python-has-json-header", true);
+        }
+    }
+
+    private void addDefaultContentTypeForBodyOperations(List<CodegenOperation> operations) {
+        for (CodegenOperation operation : operations) {
+            if (operation.bodyParam != null && !operation.hasConsumes) {
+                operation.consumes = List.of(Map.of("mediaType", "application/json"));
+                operation.hasConsumes = true;
+            }
         }
     }
 
