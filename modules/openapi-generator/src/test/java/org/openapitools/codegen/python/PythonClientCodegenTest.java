@@ -185,6 +185,19 @@ public class PythonClientCodegenTest {
     }
 
     @Test
+    public void testWildcardRequestBodyDefaultsToJsonContentType() throws IOException {
+        final String output = generateFiles(
+                new PythonClientCodegen(), "src/test/resources/3_0/v1beta3.yaml");
+        final Path api = Paths.get(output, "openapi_client", "api", "apiv1beta3_api.py");
+
+        TestUtils.assertFileContains(
+                api,
+                "def _create_binding_serialize(",
+                "self.api_client._set_header(_header_params, 'Content-Type', _content_type)",
+                "self.api_client.select_header_content_type(\n                    ['application/json']");
+    }
+
+    @Test
     public void testWebhookParametersAndJsonHeaderContent() throws IOException {
         File output = Files.createTempDirectory("test").toFile().getCanonicalFile();
         output.deleteOnExit();
